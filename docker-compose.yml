@@ -1,0 +1,26 @@
+version: "3"
+services:
+  web:
+    container_name: PROJECT_NAME_web
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/PROJECT_NAME
+    environment:
+      RAILS_ENV: development
+    env_file:
+      - ./mysql.env
+    depends_on:
+      - db
+    
+  db:
+    container_name: PROJECT_NAME_db
+    image: mysql:MYSQL_VERSION
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/volumes:/var/lib/mysql
+    env_file:
+      - ./mysql.env
